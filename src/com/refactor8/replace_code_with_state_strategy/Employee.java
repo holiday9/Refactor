@@ -11,24 +11,24 @@ public class Employee {
 	}
 
 	int payAmount() {
-		switch (getType()) {
-		case EmployeeType.ENGINEER:
-			return _monthlySalary;
-		case EmployeeType.SALESMAN:
-			return _monthlySalary + _commission;
-		case EmployeeType.MANAGER:
-			return _monthlySalary + _bonus;
-		default:
-			throw new RuntimeException("Incorrect Employee");
-		}
-	}
-
-	private int getType() {
-		return _type.getTypeCode();
+		return _type.payAmount(this);
 	}
 
 	private void setType(int arg) {
 		_type = EmployeeType.newType(arg);
+	}
+
+	public int getMonthlySalary() {
+		return _monthlySalary;
+	}
+
+
+	private int getCommission() {
+		return _commission;
+	}
+
+	private int getBonus() {
+		return _bonus;
 	}
 
 	public abstract static class EmployeeType {
@@ -51,6 +51,20 @@ public class Employee {
 				throw new IllegalArgumentException("Incorrect Employee code");
 			}
 		}
+		
+		int payAmount(Employee emp) {
+			switch (getTypeCode()) {
+			case EmployeeType.ENGINEER:
+				return emp.getMonthlySalary();  // (refactor) 这写字段可以移动到EmpoyeeType
+			case EmployeeType.SALESMAN:
+				return emp.getMonthlySalary() + emp.getCommission();
+			case EmployeeType.MANAGER:
+				return emp.getMonthlySalary() + emp.getBonus();
+			default:
+				throw new RuntimeException("Incorrect Employee");
+			}
+		}
+		
 	}
 
 	static class Engineer extends EmployeeType {
@@ -66,7 +80,6 @@ public class Employee {
 		int getTypeCode() {
 			return EmployeeType.MANAGER;
 		}
-
 	}
 
 	static class SalesMan extends EmployeeType {
