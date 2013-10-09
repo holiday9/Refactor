@@ -52,25 +52,17 @@ public class Employee {
 			}
 		}
 		
-		int payAmount(Employee emp) {
-			switch (getTypeCode()) {
-			case EmployeeType.ENGINEER:
-				return emp.getMonthlySalary();  // (refactor) 这写字段可以移动到EmpoyeeType
-			case EmployeeType.SALESMAN:
-				return emp.getMonthlySalary() + emp.getCommission();
-			case EmployeeType.MANAGER:
-				return emp.getMonthlySalary() + emp.getBonus();
-			default:
-				throw new RuntimeException("Incorrect Employee");
-			}
-		}
-		
+		abstract int payAmount(Employee emp);
 	}
 
 	static class Engineer extends EmployeeType {
 		@Override
 		int getTypeCode() {
 			return EmployeeType.ENGINEER;
+		}
+		
+		int payAmount(Employee emp) {
+			return emp.getMonthlySalary();
 		}
 	}
 
@@ -79,6 +71,10 @@ public class Employee {
 		@Override
 		int getTypeCode() {
 			return EmployeeType.MANAGER;
+		}
+		
+		int payAmount(Employee emp) {
+			return emp.getMonthlySalary() + emp.getBonus();
 		}
 	}
 
@@ -89,5 +85,8 @@ public class Employee {
 			return EmployeeType.SALESMAN;
 		}
 
+		int payAmount(Employee emp) {
+			return emp.getMonthlySalary() + emp.getCommission();
+		}
 	}
 }
